@@ -1,8 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import { NavLink } from "react-router-dom";
 import Toolbar from "./Components/Toolbar/Toolbar";
 import Quotes from "./Container/Quotes/Quotes";
-import AddForm from "./Components/AddForm/AddForm";
+import AddForm from "./Container/AddForm/AddForm";
 import Sidebar from "./Components/Sidebar/Sidebar";
 
 function App() {
@@ -11,12 +10,12 @@ function App() {
       <header>
         <Toolbar />
       </header>
-      <div className="container">
+      <div className="container w-75">
         <div className="row">
           <Sidebar />
           <div className="col-9">
             <Routes>
-              <Route path="/quotes" element={<Quotes />} />
+              <Route path="/" element={<Quotes />} />
               <Route path="/quotes/:category" element={<Quotes />} />
               <Route path="/add-quote" element={<AddForm />} />
             </Routes>

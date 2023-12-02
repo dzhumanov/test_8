@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Quotes } from "../../types";
 import axiosApi from "../../axiosApi";
 import QuotesList from "../../Components/QuotesList/QuotesList";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 
 const Quotes: React.FC = () => {
   const [quotes, setQuotes] = useState<Quotes | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
   const { category } = useParams();
 
   useEffect(() => {
