@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Quotes } from "../../types";
+import { useParams } from "react-router-dom";
 import axiosApi from "../../axiosApi";
 import QuotesList from "../../Components/QuotesList/QuotesList";
-import { useParams } from "react-router-dom";
+import Preloader from "../../Components/Preloader/Preloader";
 
 const Quotes: React.FC = () => {
   const [quotes, setQuotes] = useState<Quotes | null>(null);
@@ -38,7 +39,19 @@ const Quotes: React.FC = () => {
 
   return (
     <>
-      <QuotesList quotes={quotes} onDelete={onDelete} />
+      {loading ? (
+        <Preloader />
+      ) : (
+        <>
+          {quotes && Object.keys(quotes).length > 0 ? (
+            <QuotesList quotes={quotes} onDelete={onDelete} />
+          ) : (
+            <div className="col-6">
+              <h1 className="text-center mt-5">No quotes</h1>
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 };

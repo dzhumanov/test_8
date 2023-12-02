@@ -2,7 +2,7 @@ import React from "react";
 import { QuoteType } from "../../types";
 import CategoryList from "../../CategoryList";
 import { Button } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const getCategoryNameById = (categoryId: string) => {
   const category = CategoryList.find((cat) => cat.id === categoryId);
@@ -34,6 +34,5 @@ const Quote: React.FC<QuoteType & { id: string; onDelete: () => void }> = ({
     </div>
   );
 };
-
 
 export default Quote;

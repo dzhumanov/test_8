@@ -4,7 +4,7 @@ import Quote from "./Quote";
 
 interface Props {
   quotes: Quotes | null;
-  onDelete: (quoteId:string) => void;
+  onDelete: (quoteId: string) => void;
 }
 
 const QuoteList: React.FC<Props> = ({ quotes, onDelete }) => {
