@@ -1,32 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { QuoteType, Quotes } from "../../types";
+import { Quotes } from "../../types";
 import axiosApi from "../../axiosApi";
 import QuotesList from "../../Components/QuotesList/QuotesList";
+import { useNavigate, useParams } from "react-router-dom";
 
-// interface Props {
-//   categoryId: string;
-// }
 
-const Quotes: React.FC = ({}) => {
+const Quotes: React.FC = () => {
   const [quotes, setQuotes] = useState<Quotes | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const { category } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axiosApi.get("quotes.json");
-        setQuotes(response.data);
+        if (category) {
+          const response = await axiosApi.get(
+            `quotes.json?orderBy="category"&equalTo="${category}"`
+          );
+          setQuotes(response.data);
+        } else {
+          const response = await axiosApi.get("quotes.json");
+          setQuotes(response.data);
+        }
       } finally {
         setLoading(false);
       }
     };
     void fetchData();
-  }, []);
+  }, [category]);
 
   return (
     <>
-      <QuotesList quotes={quotes}/>
+      <QuotesList quotes={quotes} />
     </>
   );
 };
