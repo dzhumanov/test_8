@@ -3,6 +3,8 @@ import Toolbar from "./Components/Toolbar/Toolbar";
 import Quotes from "./Container/Quotes/Quotes";
 import AddForm from "./Container/AddForm/AddForm";
 import Sidebar from "./Components/Sidebar/Sidebar";
+import "./App.css";
+import EditForm from "./Container/AddForm/EditForm";
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
           <div className="col-9">
             <Routes>
               <Route path="/" element={<Quotes />} />
+              <Route path="/quotes/:id/edit" element={<EditForm />} />
               <Route path="/quotes/:category" element={<Quotes />} />
               <Route path="/add-quote" element={<AddForm />} />
             </Routes>

@@ -1,20 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { QuoteType } from "../../types";
 import { Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
-import { useNavigate } from "react-router-dom";
-import CategoryList from "../../CategoryList";
 import axiosApi from "../../axiosApi";
+import { useNavigate, useParams } from "react-router-dom";
+import CategoryList from "../../CategoryList";
 
-const AddForm = () => {
+const EditForm: React.FC = () => {
   const [quote, setQuote] = useState<QuoteType>({
+    id: "",
     category: "",
     author: "",
     text: "",
-    id: Date.now().toString(), // Генерация уникального идентификатора на основе текущего времени
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchQuote = async () => {
+      try {
+        setLoading(true);
+        if (id) {
+          const response = await axiosApi.get(`quotes/${id}.json`);
+          setQuote({ ...response.data, id: id });
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void fetchQuote();
+  }, [id]);
 
   const onChange = (
     event: React.ChangeEvent<
@@ -30,9 +47,15 @@ const AddForm = () => {
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
+    const updatedQuote = {
+      category: quote.category,
+      author: quote.author,
+      text: quote.text,
+      id: quote.id,
+    };
 
     try {
-      await axiosApi.post("quotes.json", quote);
+      await axiosApi.put(`quotes/${quote.id}.json`, updatedQuote);
       navigate("/");
     } finally {
       setLoading(false);
@@ -41,7 +64,7 @@ const AddForm = () => {
 
   return (
     <div className="w-50 mx-auto mt-3">
-        <h2>Add new quote</h2>
+        <h2>Edit quote</h2>
       <Form onSubmit={onSubmit}>
         <Form.Group controlId="author">
           <Form.Label>Author:</Form.Label>
@@ -50,12 +73,18 @@ const AddForm = () => {
             name="author"
             placeholder="Type author"
             onChange={onChange}
+            value={quote.author}
             required
-          ></Form.Control>
+          />
         </Form.Group>
         <Form.Group controlId="select" className="mt-3">
           <Form.Label>Category:</Form.Label>
-          <Form.Select name="category" required onChange={onChange}>
+          <Form.Select
+            name="category"
+            required
+            onChange={onChange}
+            value={quote.category}
+          >
             <option>Select a category</option>
             {CategoryList.map((category) => (
               <option key={category.id} value={category.id}>
@@ -71,15 +100,16 @@ const AddForm = () => {
             rows={4}
             name="text"
             onChange={onChange}
+            value={quote.text}
             required
           />
         </Form.Group>
         <Button type="submit" variant="primary" className="mt-3">
-          Send
+          Update
         </Button>
       </Form>
     </div>
   );
 };
 
-export default AddForm;
+export default EditForm;
